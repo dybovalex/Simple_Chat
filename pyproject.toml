@@ -1,0 +1,19 @@
+[project]
+name = "68-simple-chat"
+version = "0.1.0"
+description = "A lightweight chat application built with Flask and SQLAlchemy"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bootstrap-flask>=2.5.0",
+    "djlint>=1.36.4",
+    "flask>=3.1.2",
+    "flask-sqlalchemy>=3.1.1",
+    "sqlalchemy>=2.0.45",
+]
+
+[tool.djlint]
+profile = "jinja"
+indent = 2
+max_line_length = 88
+

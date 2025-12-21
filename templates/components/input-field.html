@@ -1,0 +1,17 @@
+<form class="input-group mb-3 my-form"
+      {% if action %}action="{{ action }}"{% endif %}
+      {% if method %}method="{{ method }}"{% endif %}>
+    <input type="text"
+           name="{{ input_name | default("message") }}"
+           class="form-control"
+           placeholder="{{ placeholder | default("Enter your message") }}"
+           aria-label="{{ aria_label | default("Input field") }}"
+           aria-describedby="basic-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary"
+                type="{{ button_type | default("button") }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}>
+            {{ button_text | default("Senden") }}
+        </button>
+    </div>
+</form>

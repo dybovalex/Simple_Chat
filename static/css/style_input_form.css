@@ -1,0 +1,7 @@
+.my-form {
+  position: fixed;
+  bottom: 24px;
+  left: 80px;
+  right: 80px;
+  width: calc(100% - 160px);
+}
