@@ -24,8 +24,12 @@
             {% include "components/card.html" %}
         {% endfor %}
         {# comment # Display the input field #}
-        {% with input_name="user_message", action=url_for('index', user=user), method="POST", button_type="submit", button_text="Senden" %}
+        {% with input_field_id="user_message", button_text="Senden", onclick="sendMessage()" %}
             {% include "components/input-field.html" %}
         {% endwith %}
+
     </div>
 {% endblock content %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock scripts %}

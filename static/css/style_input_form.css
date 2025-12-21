@@ -1,7 +1,10 @@
 .my-form {
   position: fixed;
   bottom: 24px;
-  left: 80px;
-  right: 80px;
-  width: calc(100% - 160px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1140px; /* or match your container size */
+  padding-left: 12px;
+  padding-right: 12px;
 }
