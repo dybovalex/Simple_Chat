@@ -7,7 +7,7 @@ function sendMessage() {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'user_message=' + encodeURIComponent(message)
+            body: 'user_msg=' + encodeURIComponent(message)
         })
         .then(response => {
             if (response.ok) {
