@@ -1,35 +1,27 @@
 {% extends "base.html" %}
 {% block title %}
-    Simple Chat
+    Simple Chat - Users
 {% endblock title %}
 {% block styles %}
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style_input_form.css') }}">
+          href="{{ url_for('static', filename='css/style_user_card.css') }}">
 {% endblock styles %}
 {% block content %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Chat Messenger</a>
+            <a class="navbar-brand" href="{{ url_for("main.home") }}">Chat Messenger</a>
         </div>
     </nav>
-    <div class="container">
-        {# comment # Display the messages #}	
-        {% for msg in messages %}
-            {% if msg.message_type.value == "user_message" %}
-                {% set align = "end" %}
+    <div class="container mt-4">
+        <h2 class="mb-4">Users</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for user in users %}
+                {% include "components/user-card.html" %}
             {% else %}
-                {% set align = "start" %}
-            {% endif %}
-            {% set message = msg.message %}
-            {% include "components/card.html" %}
-        {% endfor %}
-        {# comment # Display the input field #}
-        {% with input_field_id="user_message", button_text="Senden", onclick="sendMessage()" %}
-            {% include "components/input-field.html" %}
-        {% endwith %}
-
+                <div class="col-12">
+                    <p class="text-muted">No users yet. Start a chat to create one!</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock content %}
-{% block scripts %}
-    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
-{% endblock scripts %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+    Simple Chat
+{% endblock title %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style_input_form.css') }}">
+{% endblock styles %}
+{% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Chat Messenger</a>
+        </div>
+    </nav>
+    <div class="container">
+        {# comment # Display the messages #}	
+        {% for msg in messages %}
+            {% if msg.message_type.value == "user_message" %}
+                {% set align = "end" %}
+            {% else %}
+                {% set align = "start" %}
+            {% endif %}
+            {% set message = msg.message %}
+            {% include "components/card.html" %}
+        {% endfor %}
+        {# comment # Display the input field #}
+        {% with input_field_id="user_message", button_text="Senden", onclick="sendMessage()" %}
+            {% include "components/input-field.html" %}
+        {% endwith %}
+
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock scripts %}

@@ -1,0 +1,20 @@
+<div class="col">
+    <a href="{{ url_for('main.chat', nickname=user.nickname) }}" 
+       class="text-decoration-none">
+        <div class="card h-100 shadow-sm user-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.nickname }}</h5>
+                <p class="card-text text-muted">
+                    <small>
+                        Joined: {{ user.created_at.strftime('%Y-%m-%d') }}
+                    </small>
+                </p>
+                <p class="card-text">
+                    <span class="badge bg-secondary">
+                        {{ user.messages | length }} messages
+                    </span>
+                </p>
+            </div>
+        </div>
+    </a>
+</div>
