@@ -4,14 +4,16 @@ A lightweight chat application built with Flask and SQLAlchemy.
 
 ## Features
 
-- User-based chat rooms (accessed via URL path)
+- User management with unique nicknames
+- Individual chat rooms for each user
 - Message persistence with SQLite database
 - Clean, responsive UI with Bootstrap 5
+- Flash messages for user feedback
 
 ## Tech Stack
 
-- **Backend:** Flask, Flask-SQLAlchemy
-- **Frontend:** Jinja2 templates, Bootstrap 5
+- **Backend:** Flask, Flask-SQLAlchemy, Flask-WTF
+- **Frontend:** Jinja2 templates, Bootstrap 5 (via Flask-Bootstrap)
 - **Database:** SQLite
 
 ## Requirements
@@ -35,7 +37,7 @@ A lightweight chat application built with Flask and SQLAlchemy.
    uv sync
 
    # Or using pip
-   pip install -r requirements.txt
+   pip install -e .
    ```
 
 3. Run the application:
@@ -48,30 +50,43 @@ A lightweight chat application built with Flask and SQLAlchemy.
    python main.py
    ```
 
-4. Open your browser and navigate to `http://127.0.0.1:5000/<username>` (replace `<username>` with any name to start chatting).
+4. Open your browser and navigate to `http://127.0.0.1:5000/`
 
 ## Usage
 
-- Access the chat by visiting `http://127.0.0.1:5000/your_name`
-- Each unique URL path creates a separate chat room for that user
+- Visit the home page to see all users
+- Click "Add New User" to create a new user with a unique nickname
+- Click on a user card to open their chat room
 - Messages are persisted in the SQLite database
 
 ## Project Structure
 
 ```
 simple-chat/
-├── main.py              # Flask application entry point
-├── pyproject.toml       # Project configuration and dependencies
+├── main.py                  # Application entry point
+├── pyproject.toml           # Project configuration and dependencies
+├── app/
+│   ├── __init__.py          # Flask app factory
+│   ├── config.py            # Configuration settings
+│   ├── forms.py             # WTForms definitions
+│   ├── models.py            # SQLAlchemy models (User, Message)
+│   └── routes.py            # Route handlers
 ├── static/
-│   └── css/
-│       └── style_input_form.css
+│   ├── css/
+│   │   ├── style_input_form.css
+│   │   └── style_user_card.css
+│   └── js/
+│       └── chat.js
 ├── templates/
-│   ├── base.html        # Base template
-│   ├── index.html       # Main chat page
+│   ├── base.html            # Base template
+│   ├── index.html           # Home page (user list)
+│   ├── chat.html            # Chat room page
 │   └── components/
 │       ├── card.html
-│       └── input-field.html
-└── instance/            # SQLite database (auto-generated)
+│       ├── input-field.html
+│       ├── navbar.html
+│       └── user-card.html
+└── instance/                # SQLite database (auto-generated)
 ```
 
 ## License

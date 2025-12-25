@@ -23,18 +23,11 @@
     {% endwith %}
     <div class="container mt-4">
         <h2 class="mb-4">Users</h2>
-        <!-- Add User Form - positioned to the right -->
-        <div class="row mb-4">
-            <div class="col-md-6 ms-auto">
-                <!-- ms-auto pushes to right -->
-                <form method="post" action="{{ url_for("main.create_user") }}">
-                    {{ form.hidden_tag() }}  <!-- CSRF token -->
-                    <div class="input-group">
-                        {{ form.nickname(class="form-control", placeholder="Enter nickname") }}
-                        {{ form.submit(class="btn btn-primary") }}
-                    </div>
-                </form>
-            </div>
+        <div class="d-flex justify-content-end mb-4">
+            <button type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addUserModal">Add New User</button>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for user in users %}
@@ -46,4 +39,36 @@
             {% endfor %}
         </div>
     </div>
+    <!-- Add User Modal -->
+    <div class="modal fade"
+         id="addUserModal"
+         tabindex="-1"
+         aria-labelledby="addUserModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form method="post" action="{{ url_for("main.create_user") }}">
+                    {{ form.hidden_tag() }}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            {{ form.nickname.label(class="form-label") }}
+                            {{ form.nickname(class="form-control", placeholder="Enter nickname") }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
+
