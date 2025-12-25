@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for
-
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app import db
 from app.models import User, Message, MessageType
+from app.forms import AddUserForm
+from sqlalchemy.exc import IntegrityError
 
 main = Blueprint("main", __name__)
 
@@ -20,7 +21,8 @@ def get_or_create_user(nickname):
 def home():
     """Home page - list all users."""
     users = User.query.order_by(User.created_at.desc()).all()
-    return render_template("index.html", users=users)
+    form = AddUserForm()
+    return render_template("index.html", users=users, form=form)
 
 
 @main.route("/chat/<nickname>", methods=["GET", "POST"])
@@ -45,3 +47,19 @@ def chat(nickname):
         .all()
     )
     return render_template("chat.html", user=user, messages=messages)
+
+
+@main.route("/create-user", methods=["POST"])
+def create_user():
+    form = AddUserForm()
+    if form.validate_on_submit():
+        nickname = (form.nickname.data or "").strip()
+        try:
+            user = User(nickname=nickname)
+            db.session.add(user)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash("This nickname is already taken!", "danger")
+        return redirect(url_for("main.home"))
+    return redirect(url_for("main.home"))

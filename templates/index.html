@@ -7,13 +7,35 @@
           href="{{ url_for('static', filename='css/style_user_card.css') }}">
 {% endblock styles %}
 {% block content %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for("main.home") }}">Chat Messenger</a>
-        </div>
-    </nav>
+    {% include "components/navbar.html" %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show"
+                         role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     <div class="container mt-4">
         <h2 class="mb-4">Users</h2>
+        <!-- Add User Form - positioned to the right -->
+        <div class="row mb-4">
+            <div class="col-md-6 ms-auto">
+                <!-- ms-auto pushes to right -->
+                <form method="post" action="{{ url_for("main.create_user") }}">
+                    {{ form.hidden_tag() }}  <!-- CSRF token -->
+                    <div class="input-group">
+                        {{ form.nickname(class="form-control", placeholder="Enter nickname") }}
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for user in users %}
                 {% include "components/user-card.html" %}
