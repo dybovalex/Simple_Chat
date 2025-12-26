@@ -3,6 +3,8 @@ from app import db
 from app.models import User, Message, MessageType
 from app.forms import AddUserForm
 from sqlalchemy.exc import IntegrityError
+import httpx
+
 
 main = Blueprint("main", __name__)
 
@@ -31,13 +33,35 @@ def chat(nickname):
     user = get_or_create_user(nickname)
 
     if request.method == "POST":
-        new_message = Message(
-            user_id=user.id,
-            message=request.form["user_msg"],
-            message_type=MessageType.user_message,
-        )
-        db.session.add(new_message)
-        db.session.commit()
+        user_message_text = request.form["user_msg"]
+        
+        # Call FastAPI AI service
+        try:
+            with httpx.Client() as client:
+                response = client.post(
+                    "http://localhost:8000/generate-reply",
+                    json={
+                        "user_id": user.id,
+                        "user_message_text": user_message_text
+                    },
+                    timeout=30.0  # 30 second timeout for OpenAI
+                )
+                response.raise_for_status()  # Raise exception for 4xx/5xx errors
+        except httpx.RequestError as e:
+            # FastAPI is down or network error
+            # Save user message anyway, show error
+            new_message = Message(
+                user_id=user.id,
+                message=user_message_text,
+                message_type=MessageType.user_message,
+            )
+            db.session.add(new_message)
+            db.session.commit()
+            flash("AI service is unavailable. Your message was saved.", "warning")
+        except httpx.HTTPStatusError as e:
+            # FastAPI returned an error
+            flash(f"AI service error: {e.response.status_code}", "danger")
+        
         return redirect(url_for("main.chat", nickname=nickname))
 
     # Get all messages for this user
